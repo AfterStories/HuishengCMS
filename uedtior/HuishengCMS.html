@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<!-- 界面样式 -->
+	<link rel="stylesheet" href="css/layout.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="css/imgupload.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="css/webuploader.css" type="text/css" media="screen" />
+	
+	<title>惠生好孕医疗中心后台管理</title>
+	<script src="third-party/jquery-1.10.2.min.js" type="text/javascript"></script>
+	<script src="js/cms.js" type="text/javascript"></script>
+<!-- 引入文本编辑器 -->
+	 <script type="text/javascript" charset="utf-8" src="ueditor.config.js"></script>	
+   	<script type="text/javascript" charset="utf-8" src="ueditor.all.min.js"></script> 
+	 <script type="text/javascript" charset="utf-8" src="lang/zh-cn/zh-cn.js"></script>
+<!-- 引入图片上传工具 -->
+	<script type="text/javascript" charset="utf-8" src="js/webuploader.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/upload.js"></script>
+
+<script type="text/javascript">
+
+		$(document).ready(function(){
+
+/*实例化文本编辑器*/
+		 var editor_a = UE.getEditor('myEditor',{ serverUrl: '../php/controller.php'});
+
+/*tab切换小效果*/
+		$('#tabs li').click(function(){
+			var cur = $(this).index();
+			$('#main article').eq(cur).show().siblings('#main article').hide();
+		});
+//--自动切换提交地址----
+		        var doc=document,
+		                version = editor_a.options.serverUrl || editor_a.options.imageUrl || "php",
+		                form=doc.getElementById("form");
+
+		            form.action="../php/getContent.php";
+
+});
+
+</script>
+
+</head>
+<body>
+<header id="header">
+		<hgroup>
+			<h1 class="site_title"><a href="index.html">管理控制面板</a></h1>
+			<h2 class="section_title">惠生好孕医疗中心后台管理</h2>
+			<div class="btn_view_site">
+			<a href="">打开网站</a>
+			</div>
+		</hgroup>
+</header> <!-- end of header bar -->
+	
+	<section id="secondary_bar">
+		<div class="user">
+			<!-- <a class="logout_user" href="#" title="Logout">Logout</a> -->
+		</div>
+
+	</section><!-- end of secondary bar -->
+	<div id="main-content">
+		<aside id="sidebar" class="column">
+			<div id="tabs">
+		<!-- <h3>内容管理</h3>		 -->
+			
+			<li class="icn_edit_article"><a href="#">发布&nbsp;/&nbsp;编辑内容</a></li>
+			<li class="icn_new_article"><a href="#">内容管理</a></li>			
+		<!-- <h3>媒体控制</h3> -->
+		
+			<!-- <li class="icn_folder"><a href="#">文件管理</a></li> -->
+			<li class="icn_photo"><a href="#">首页轮播图设置</a></li>
+
+		
+		<!-- <h3>用户管理</h3> -->
+		
+			<li class="icn_add_user"><a href="#">设置管理员</a></li>
+			<li class="icn_view_users"><a href="#">设置客服</a></li>
+			<!-- <li class="icn_profile"><a href="#">配置文件</a></li> -->
+		
+		
+		<!-- <h3>管理设置</h3> -->
+		
+			<li class="icn_settings"><a href="#">选项</a></li>
+			<li class="icn_security"><a href="#">安全性</a></li>
+			<li class="icn_jump_back"><a href="#">退出</a></li>
+		
+		</div>
+		
+		<footer>
+			<hr/>
+			<p><strong>Copyright &copy; 2016 Website Admin</strong></p>
+			<p> by <a href="#">Storeis</a></p>
+		</footer>
+		
+	</aside><!-- end of sidebar -->
+	
+	
+	<section id="main" class="column">
+		
+<!-- 第一个  tab1发布新内容  文本编辑器容器-->
+				
+		<article  class="module " id="editnew" style="display:block">
+			<header class="Rheader"><h3>发布新内容</h3></header>
+			
+		<!-- 文本编辑器部分 -->
+			<div id="text-edit">
+			  
+				<form id="form" style="width:100%" method="post" target="_blank">
+				<input type = "text" value="请在这里输入标题" id = "titlename" />
+				 <script type="text/plain" id="myEditor" name="myEditor">
+				          <p>请在这里输入正文内容</p>
+				 </script>
+				</form>
+					<p>
+					       <button id="push" onclick="test() ">提交</button>
+					</p>
+
+			</div>
+			<!-- 提交内容和标题 -->
+			<script type="text/javascript">
+			var $form=document.getElementById('form')
+			function test(){
+				if ($("#titlename").val().length == 0)
+					    {
+					        alert("请输入标题或内容!");
+					        return;
+					    }else{
+					    	$form.submit();					    	
+
+					       $.ajax({
+						        dataType:'json',
+						        type:'POST',
+						        data:$("#titlename").val(),
+						        url:'../php/getContent.php',
+						        success:function(data) {
+						            //alert(JSON.stringify(data));
+						            if (data.errCode == 0){
+						                alert("发布成功!");
+						            }
+						            else{
+						                alert("发布失败!");
+						            }
+						        }
+						    });
+
+					    }
+
+					};
+			</script>
+
+		</article><!-- end of post new article -->
+		
+		<!-- 第1个tab结束 -->
+
+		
+		<div class="clear"></div>
+		
+		<!-- 第二个tab  管理内容 -->
+
+		<article  class="module " id="cms">
+		<header class="Rheader"><h3 class="tabs_involved">内容管理</h3><button id="trashall">删除所选</button></header>
+		<div class="tab_container">			
+			<div id="tab" class="tab_content">
+			<table class="tablesorter" cellspacing="0"> 
+			<thead> 
+				<tr> 
+				<th><input onclick="selectAll()" style="margin-left:-7px;"type="checkbox"     id="controlAll"/></th>
+				<br>
+    				<th>标题名称</th> 
+    				<th>作者</th> 
+    				<th>时间</th> 
+    				<th>操作</th> 
+				</tr> 
+			</thead> 
+			<tbody id="list"> <!-- 
+			文章列表第一行 -->
+				<tr> 
+   				<td><input type="checkbox" name="ids"></td> 
+    				<td>我是标题</td> 
+    				<td>作者1</td> 
+    				<td>5th April 2011</td> 
+    				<td><button type="button" class="edit" ></button>
+    				        <button type="button" class="trash"></button>
+    				</td> 
+				</tr> 
+				<!-- 
+			文章列表第二行 -->
+				<tr> 
+   				<td><input type="checkbox" name="ids"></td> 
+    				<td>Ipsum Lorem Dolor Sit Amet</td> 
+    				<td>Freebies</td> 
+    				<td>6th April 2011</td> 
+   				 <td><button type="button" class="edit" ></button>
+    				        <button type="button" class="trash"></button>
+    				</td>  
+				</tr>
+				
+
+				<tr> 
+   				<td><input type="checkbox" name="ids"></td> 
+    				<td>Sit Amet Dolor Ipsum</td> 
+    				<td>Tutorials</td> 
+    				<td>10th April 2011</td> 
+    				<td><button type="button" class="edit" ></button>
+    				        <button type="button" class="trash"></button>
+    				</td>  
+				</tr> 
+				
+
+				<tr> 
+   				<td><input type="checkbox" name="ids"></td> 
+    				<td>Dolor Lorem Amet</td> 
+    				<td>Articles</td> 
+    				<td>16th April 2011</td> 
+   				 	<td><button type="button" class="edit" ></button>
+    				        <button type="button" class="trash"></button>
+    				</td>  
+				</tr>
+				
+
+				<tr> 
+   				<td><input type="checkbox" name="ids"></td> 
+    				<td>Dolor Lorem Amet</td> 
+    				<td>Articles</td> 
+    				<td>16th April 2011</td> 
+   				<td><button type="button" class="edit" ></button>
+    				<button type="button" class="trash"></button>
+    				</td>  
+				</tr>  
+			</tbody> 
+			</table>
+			</div><!-- end of #tab1 -->
+			
+		</div><!-- end of .tab_container -->
+			
+		</article>
+		<div class="clear"></div>
+
+		
+		<!-- 第三个tab  轮播图 -->
+		<article  class="module ">
+			
+			<header class="Rheader"><h3>轮播图设置</h3></header>
+				    <div id="wrapper">
+	        <div id="container">
+	           
+
+	            <!--图片上传工具 上传进度，缩略图预览-->
+
+	            <div id="uploader">
+	                <div class="queueList">
+	                    <div id="dndArea" class="placeholder">
+	                        <div id="filePicker"></div>
+	                        <p>或将照片拖到这里</p>
+	                    </div>
+	                </div>
+	                <div class="statusBar" style="display:none;">
+	                    <div class="progress">
+	                        <span class="text">0%</span>
+	                        <span class="percentage"></span>
+	                    </div><div class="info"></div>
+	                    <div class="btns">
+	                        <div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+							
+					 
+	</article>
+			<div class="clear"></div>
+
+	
+	</section>
+
+</div>
+</body>
+
+</html>
