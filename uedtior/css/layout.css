@@ -555,6 +555,7 @@ article{
 }
 
 
+<<<<<<< HEAD
 
 #filePicker div{
 	width: 100px;
@@ -583,3 +584,11 @@ article{
 	height: 30px;
 	margin-top: 10px;
 }
+=======
+#admin{
+	float: left;
+	width: 500px:
+	height:300px;
+	margin :auto;
+}
+>>>>>>> origin/master

@@ -1789,9 +1789,14 @@
                 width && height && shimContainer.css({
                     bottom: 'auto',
                     right: 'auto',
+<<<<<<< HEAD
                     width: 128 + 'px',
                     height: 50 + 'px'
 
+=======
+                    width: width + 'px',
+                    height: height + 'px'
+>>>>>>> origin/master
                 }).offset( pos );
             },
     

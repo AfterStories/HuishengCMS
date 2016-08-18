@@ -30,7 +30,11 @@
         UEDITOR_HOME_URL: URL
 
         // 服务器统一请求接口路径
+<<<<<<< HEAD
         , serverUrl: "http://123.57.223.98/Public/Ueditor/php/controller.php"
+=======
+        , serverUrl: "http://192.168.1.101:8083/Public/Ueditor/php/controller.php"
+>>>>>>> origin/master
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的重新定义
         , toolbars: [[

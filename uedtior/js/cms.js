@@ -1,4 +1,28 @@
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> origin/master
 function editArticle(id){
 		global_id = id;
 		$('#editnew').show().siblings('#module').hide();
@@ -9,7 +33,11 @@ function editArticle(id){
 		type:'GET',
 		data:{id:id},
 		async:false,
+<<<<<<< HEAD
 		url:'http://123.57.223.98/Article/getArticleDetail',
+=======
+		url:'http://192.168.1.101:8083/Article/getArticleDetail',
+>>>>>>> origin/master
 		success:function(data) {
 			editor_a.setContent(data.data.text);	
 			$("#title").val(data.data.title);
@@ -22,7 +50,11 @@ function getArticleList(){
 		type:'GET',
 		data:{},
 		async:false,
+<<<<<<< HEAD
 		url:'http://123.57.223.98/Article/getArticleList',
+=======
+		url:'http://192.168.1.101:8083/Article/getArticleList',
+>>>>>>> origin/master
 		success:function(data) {
 				
 			for (var i = 0;i<data.data.length; i++) {
@@ -52,7 +84,11 @@ function delfleximg(id){
 		type:'GET',
 		data:{id:id},
 		async:false,
+<<<<<<< HEAD
 		url:'http://123.57.223.98/scrollPicture/deleteImg',
+=======
+		url:'http://192.168.1.101:8083/scrollPicture/deleteImg',
+>>>>>>> origin/master
 		success:function(data) {
 				if (data.errCode == 0){
 					alert("删除 成功 !");
@@ -73,7 +109,11 @@ function delfleximg(id){
 			dataType:'json',
 			type:'GET',
 			data:{idList:idList},
+<<<<<<< HEAD
 			url:'http://123.57.223.98/Article/deleteArticle',
+=======
+			url:'http://192.168.1.101:8083/Article/deleteArticle',
+>>>>>>> origin/master
 			success:function(data) {
 				if (data.errCode == 0){
 					alert("删除 成功 !");
@@ -92,6 +132,7 @@ function delfleximg(id){
 
 
 
+<<<<<<< HEAD
 
 
 
@@ -131,6 +172,10 @@ $(document).ready(function(){
 		}
 		});
 
+=======
+$(document).ready(function(){
+	getImgList();
+>>>>>>> origin/master
 
 $("#tijiao1").click(function(){
 	var lefttitle = $("#leftad").val()			
@@ -140,7 +185,11 @@ $("#tijiao1").click(function(){
 		type:'POST',
 		data:{kind:'left',title:lefttitle,text:lefttext},
 		async:false,
+<<<<<<< HEAD
 		url:'http://123.57.223.98/text/settext',
+=======
+		url:'http://192.168.1.101:8083/text/settext',
+>>>>>>> origin/master
 		success:function(data) {
 					if (data.errCode == 0){
 					alert("修改 成功 !");
@@ -164,7 +213,11 @@ $("#tijiao2").click(function(){
 		type:'POST',
 		data:{kind:'center',title:lefttitle,text:lefttext},
 		async:false,
+<<<<<<< HEAD
 		url:'http://123.57.223.98/text/settext',
+=======
+		url:'http://192.168.1.101:8083/text/settext',
+>>>>>>> origin/master
 		success:function(data) {
 					if (data.errCode == 0){
 					alert("修改 成功 !");
@@ -188,7 +241,11 @@ $("#tijiao3").click(function(){
 		type:'POST',
 		data:{kind:'right',title:lefttitle,text:lefttext},
 		async:false,
+<<<<<<< HEAD
 		url:'http://123.57.223.98/text/settext',
+=======
+		url:'http://192.168.1.101:8083/text/settext',
+>>>>>>> origin/master
 		success:function(data) {
 					if (data.errCode == 0){
 					alert("修改 成功 !");
@@ -209,6 +266,21 @@ $("#tijiao3").click(function(){
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> origin/master
 function getImgList(){
 
 		$.ajax({
@@ -216,7 +288,11 @@ function getImgList(){
 		type:'GET',
 		data:{},
 		async:false,
+<<<<<<< HEAD
 		url:'http://123.57.223.98/scrollPicture/getImgList',
+=======
+		url:'http://192.168.1.101:8083/scrollPicture/getImgList',
+>>>>>>> origin/master
 		success:function(data) {
 			
 		for (var i = 0;i<data.data.length; i++) {
@@ -235,10 +311,17 @@ function getImgList(){
 
 
 
+<<<<<<< HEAD
 				
 
 
 
+=======
+
+
+
+				getArticleList();
+>>>>>>> origin/master
 
 				$("#trashall").click(function() {
 
@@ -247,8 +330,13 @@ function getImgList(){
 
 					var idList = [];
 					$("input[name='ids']:checked").each(function() { // 遍历选中的checkbox
+<<<<<<< HEAD
 						var n = $(this).index();  // 获取checkbox所在行的顺序
 						var a =$("#list").find("input[name='ids']:checked:eq("+n+")")
+=======
+						var n = $(this).parents("tr").index();  // 获取checkbox所在行的顺序
+						var a =$("tbody#list").find("tr:eq("+n+")")
+>>>>>>> origin/master
 						//alert(a.attr("id"));
 
 						idList.push(a.attr('id'));
@@ -259,7 +347,11 @@ function getImgList(){
 						dataType:'json',
 						type:'GET',
 						data:{idList:idList},
+<<<<<<< HEAD
 						url:'http://123.57.223.98/Article/deleteArticle',
+=======
+						url:'http://192.168.1.101:8083/Article/deleteArticle',
+>>>>>>> origin/master
 						success:function(data) {
 							if (data.errCode == 0){
 								alert("删除 成功 !");
@@ -277,6 +369,10 @@ function getImgList(){
 				});
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 			
 });
 	
