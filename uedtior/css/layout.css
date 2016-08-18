@@ -14,13 +14,36 @@ font-size: 12px;
 height: 100%;
 min-width: 980px;
 }
+#homecontrol textarea{
+	width: 600px;
+	height: 50px;
+	resize: none;
+}
+.home{	margin-left: 150px;
+	margin-top: 30px;
+	width: 500px;
+	height: 150px;
 
+}
+#homecontrol fieldset{
+	width: 600px;
+	height: 150px;
+}
+
+
+.block{
+	display:block;
+}
 
 #push { 
-	margin: 20px auto;
-   	 display: block;  text-align: center;  line-height: 24px; text-decoration: none; 
-    height: 25px;  width: 95px; border: 0;cursor:pointer;
-    background: url(../themes/default/images/icons-all.gif) no-repeat;
+	margin: 0px auto;
+   	display: block;  
+   	text-align: center;
+   	line-height: 24px; 
+   	text-decoration: none; 
+    	height: 25px;  width: 95px; border: 0;
+    	cursor:pointer;
+   	background: url(../themes/default/images/icons-all.gif) no-repeat;
 
 }
 
@@ -336,7 +359,7 @@ width: 80%;
 float: left;
 margin: 0 10px;
 position: relative;
-top: 3px;
+top: 8px;
 }
 
 .module header {
@@ -400,7 +423,7 @@ margin-right: 10px;}
 	padding-left: 10px;
 }
 #tabs{
-	margin-top: 15px;
+	margin-top: 50px;
 }
 #tabs li a{
 	font-size: 18px;
@@ -483,7 +506,7 @@ article{
 #myEditor{
 	min-width: 800px;
 }
-#titlename{
+#title{
 	padding-left: 15px;
 	line-height: 30px;
 	width: 100%;
@@ -529,4 +552,34 @@ article{
   	text-align:center;
 	border:2px solid;
 	border-color: #b8b8bc;
+}
+
+
+
+#filePicker div{
+	width: 100px;
+	height: 30px;
+	font-size: 18px;
+}
+
+#adminpassword{
+	margin: auto;
+	text-align: center;;
+	margin-top: 100px;
+
+}
+
+#adminpassword p input{
+	width: 130px;
+	height: 30px;
+	font-size: 15px;
+	margin:10px;
+}
+#adminpassword  span{
+	font-size: 18px;
+}
+#adminpassword button{
+	width: 100px;
+	height: 30px;
+	margin-top: 10px;
 }

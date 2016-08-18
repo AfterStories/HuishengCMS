@@ -7,30 +7,78 @@
 	<link rel="stylesheet" href="css/layout.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="css/imgupload.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="css/webuploader.css" type="text/css" media="screen" />
-	
+	<link rel="stylesheet" href="css/layout.css" type="text/css" media="screen" />
 	<title>惠生好孕医疗中心后台管理</title>
 	<script src="third-party/jquery-1.10.2.min.js" type="text/javascript"></script>
-	<script src="js/cms.js" type="text/javascript"></script>
+
 <!-- 引入文本编辑器 -->
 	 <script type="text/javascript" charset="utf-8" src="ueditor.config.js"></script>	
    	<script type="text/javascript" charset="utf-8" src="ueditor.all.min.js"></script> 
 	 <script type="text/javascript" charset="utf-8" src="lang/zh-cn/zh-cn.js"></script>
-<!-- 引入图片上传工具 -->
-	<script type="text/javascript" charset="utf-8" src="js/webuploader.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="js/upload.js"></script>
+	<script src="js/cms.js" type="text/javascript"></script>
+	<script src="js/webuploader.js" type="text/javascript"></script>
+<!-- 内容管理列表分页 -->
+	<script src="js/jquery.bigpage.js" type="text/javascript"></script>
 
 <script type="text/javascript">
+function lunboreload(){
+	$("#useimg-list").empty();
+	$.ajax({
+		dataType:'json',
+		type:'GET',
+		data:{},
+		async:false,
+		url:'http://123.57.223.98/scrollPicture/getImgList',
+		success:function(data) {
+				
+		for (var i = 0;i<data.data.length; i++) {
 
+			var $tr = '<tr id="'+data.data[i].imgurl+'"><td>'+data.data[i].imgurl+'</td>'
+			var $td = '<td>'+data.data[i].index+'</td>'
+			var $use ='<td id ="delimg" onclick="delfleximg(' + data.data[i].id+');">删除</td></tr>'								
+			var imgform = $tr+$td+$use				
+    			
+			$("#useimg-list").append(imgform);
+		}
+		}
+		});
+}
 		$(document).ready(function(){
-
+			
 /*实例化文本编辑器*/
-		 var editor_a = UE.getEditor('myEditor',{ serverUrl: '../php/controller.php'});
+		 editor_a = UE.getEditor('myEditor',{ serverUrl: 'http://123.57.223.98/Public/Ueditor/php/controller.php' });
 
 /*tab切换小效果*/
+		$('.icn_edit_article').click( function(){
+			global_id = null;
+		});
+
+
+		
+/*轮播图设置按钮*/
 		$('#tabs li').click(function(){
 			var cur = $(this).index();
 			$('#main article').eq(cur).show().siblings('#main article').hide();
+
 		});
+
+
+/*		$('.icn_photo').click( function(){
+		$('#lunbo').show().siblings('#module').hide();
+		$("#admin").hide();
+
+		});
+
+		$('#adminset').click( function(){
+
+		$('#admin').show().siblings('#module').hide();
+		$("uploader-demo").hide();
+		
+		});
+*/
+
+
+
 //--自动切换提交地址----
 		        var doc=document,
 		                version = editor_a.options.serverUrl || editor_a.options.imageUrl || "php",
@@ -49,7 +97,7 @@
 			<h1 class="site_title"><a href="index.html">管理控制面板</a></h1>
 			<h2 class="section_title">惠生好孕医疗中心后台管理</h2>
 			<div class="btn_view_site">
-			<a href="">打开网站</a>
+			<a href="http://123.57.223.98/HuiShengHospital/index-home.html">打开网站</a>
 			</div>
 		</hgroup>
 </header> <!-- end of header bar -->
@@ -63,107 +111,31 @@
 	<div id="main-content">
 		<aside id="sidebar" class="column">
 			<div id="tabs">
-		<!-- <h3>内容管理</h3>		 -->
-			
-			<li class="icn_edit_article"><a href="#">发布&nbsp;/&nbsp;编辑内容</a></li>
-			<li class="icn_new_article"><a href="#">内容管理</a></li>			
-		<!-- <h3>媒体控制</h3> -->
-		
-			<!-- <li class="icn_folder"><a href="#">文件管理</a></li> -->
+			<li class="icn_new_article"><a href="#">内容管理</a></li>				 
+			<li class="icn_edit_article"><a href="#">首页版块内容设置</a></li>
+			<li class="icn_edit_article"><a href="#">发布&nbsp;/&nbsp;编辑内容</a></li>				
 			<li class="icn_photo"><a href="#">首页轮播图设置</a></li>
-
-		
-		<!-- <h3>用户管理</h3> -->
-		
-			<li class="icn_add_user"><a href="#">设置管理员</a></li>
-			<li class="icn_view_users"><a href="#">设置客服</a></li>
-			<!-- <li class="icn_profile"><a href="#">配置文件</a></li> -->
-		
-		
-		<!-- <h3>管理设置</h3> -->
-		
-			<li class="icn_settings"><a href="#">选项</a></li>
-			<li class="icn_security"><a href="#">安全性</a></li>
-			<li class="icn_jump_back"><a href="#">退出</a></li>
-		
-		</div>
+			<li class="icn_add_user" id="adminset"><a href="#">管理员设置</a></li>
+			</div>
 		
 		<footer>
 			<hr/>
 			<p><strong>Copyright &copy; 2016 Website Admin</strong></p>
-			<p> by <a href="#">Storeis</a></p>
+			
 		</footer>
 		
 	</aside><!-- end of sidebar -->
 	
 	
-	<section id="main" class="column">
+<section id="main" class="column">
 		
-<!-- 第一个  tab1发布新内容  文本编辑器容器-->
-				
-		<article  class="module " id="editnew" style="display:block">
-			<header class="Rheader"><h3>发布新内容</h3></header>
-			
-		<!-- 文本编辑器部分 -->
-			<div id="text-edit">
-			  
-				<form id="form" style="width:100%" method="post" target="_blank">
-				<input type = "text" value="请在这里输入标题" id = "titlename" />
-				 <script type="text/plain" id="myEditor" name="myEditor">
-				          <p>请在这里输入正文内容</p>
-				 </script>
-				</form>
-					<p>
-					       <button id="push" onclick="test() ">提交</button>
-					</p>
+			<!-- 第1个tab  管理内容 -->
 
-			</div>
-			<!-- 提交内容和标题 -->
-			<script type="text/javascript">
-			var $form=document.getElementById('form')
-			function test(){
-				if ($("#titlename").val().length == 0)
-					    {
-					        alert("请输入标题或内容!");
-					        return;
-					    }else{
-					    	$form.submit();					    	
-
-					       $.ajax({
-						        dataType:'json',
-						        type:'POST',
-						        data:$("#titlename").val(),
-						        url:'../php/getContent.php',
-						        success:function(data) {
-						            //alert(JSON.stringify(data));
-						            if (data.errCode == 0){
-						                alert("发布成功!");
-						            }
-						            else{
-						                alert("发布失败!");
-						            }
-						        }
-						    });
-
-					    }
-
-					};
-			</script>
-
-		</article><!-- end of post new article -->
-		
-		<!-- 第1个tab结束 -->
-
-		
-		<div class="clear"></div>
-		
-		<!-- 第二个tab  管理内容 -->
-
-		<article  class="module " id="cms">
+		<article  class="module " id="cms" style="display:block;">
 		<header class="Rheader"><h3 class="tabs_involved">内容管理</h3><button id="trashall">删除所选</button></header>
 		<div class="tab_container">			
 			<div id="tab" class="tab_content">
-			<table class="tablesorter" cellspacing="0"> 
+			<table id="list" class="tablesorter" cellspacing="0" style="font-size:14px;">
 			<thead> 
 				<tr> 
 				<th><input onclick="selectAll()" style="margin-left:-7px;"type="checkbox"     id="controlAll"/></th>
@@ -171,112 +143,414 @@
     				<th>标题名称</th> 
     				<th>作者</th> 
     				<th>时间</th> 
-    				<th>操作</th> 
+    				<th style="position: relative;right: 18px;">操作</th> 
+		
 				</tr> 
-			</thead> 
-			<tbody id="list"> <!-- 
-			文章列表第一行 -->
-				<tr> 
-   				<td><input type="checkbox" name="ids"></td> 
-    				<td>我是标题</td> 
-    				<td>作者1</td> 
-    				<td>5th April 2011</td> 
-    				<td><button type="button" class="edit" ></button>
-    				        <button type="button" class="trash"></button>
-    				</td> 
-				</tr> 
-				<!-- 
-			文章列表第二行 -->
-				<tr> 
-   				<td><input type="checkbox" name="ids"></td> 
-    				<td>Ipsum Lorem Dolor Sit Amet</td> 
-    				<td>Freebies</td> 
-    				<td>6th April 2011</td> 
-   				 <td><button type="button" class="edit" ></button>
-    				        <button type="button" class="trash"></button>
-    				</td>  
-				</tr>
-				
-
-				<tr> 
-   				<td><input type="checkbox" name="ids"></td> 
-    				<td>Sit Amet Dolor Ipsum</td> 
-    				<td>Tutorials</td> 
-    				<td>10th April 2011</td> 
-    				<td><button type="button" class="edit" ></button>
-    				        <button type="button" class="trash"></button>
-    				</td>  
-				</tr> 
-				
-
-				<tr> 
-   				<td><input type="checkbox" name="ids"></td> 
-    				<td>Dolor Lorem Amet</td> 
-    				<td>Articles</td> 
-    				<td>16th April 2011</td> 
-   				 	<td><button type="button" class="edit" ></button>
-    				        <button type="button" class="trash"></button>
-    				</td>  
-				</tr>
-				
-
-				<tr> 
-   				<td><input type="checkbox" name="ids"></td> 
-    				<td>Dolor Lorem Amet</td> 
-    				<td>Articles</td> 
-    				<td>16th April 2011</td> 
-   				<td><button type="button" class="edit" ></button>
-    				<button type="button" class="trash"></button>
-    				</td>  
-				</tr>  
-			</tbody> 
+					<!-- 文章列表显示在这里 -->
+			</thead>
+			</table>
+			<div class="dl" style="font-size:16px; text-align: center;margin-top: 20px;">
+			共&nbsp;<span id="count" style="color: red" >0</span>&nbsp;页
+			<a class="page-start" href="#" id="firstA" >&nbsp;首页</a>
+			<a class="page-start" href="#" id="prevA" accesskey="p" >&nbsp;上一页</a>
+			<a class="page-end" href="#"  id="nextA" accesskey="n" >&nbsp;下一页</a>
+			<a class="page-end" href="#"  id="lastA"  >&nbsp;尾页</a>
+			当前&nbsp;<span style="color: red" id="curentPage"></span>&nbsp;页
+			 跳转到 <input id="toPageText" type="text" size="3" maxlength="3" > 页  <a class="page-next" href="#"  id="skipA"  >GO</a>
+</div>
 			</table>
 			</div><!-- end of #tab1 -->
 			
 		</div><!-- end of .tab_container -->
 			
 		</article>
+
+<script type="text/javascript">
+	
+$(function(){	
+
+var data_ = [];
+getArticleList();
+function getArticleList(){
+    $.ajax({
+    dataType:'json',
+    type:'GET',
+    data:{},
+    async:false,
+    url:'http://192.168.1.101:8083/Article/getArticleList',
+    success:function(data) {
+
+    	
+        	for (var i = 0;i<data.data.length; i++) {
+        		var d = [];
+        		d.push('<input  id="' +data.data[i].id+'" type="checkbox" name="ids">');
+        		d.push(data.data[i].title);
+        		d.push(data.data[i].author);
+        		d.push(data.data[i].createtime);
+        		d.push('<button type="button" class="edit" onclick = "editArticle(' +data.data[i].id + ')">');
+
+        		data_.push(d);
+ 	};
+     
+			}
+
+	});
+}
+
+$("#list").bigPage({data:data_,pageSize:12,position:"both",strData:{separatorTD:","},cssWidgets:["appendToTable","eventColor"],callback:function(){
+			$("#curentPage").html(bigPage.toPage());
+			$("#count").html(bigPage.pageNumber());		
+		}});
+	
+
+$(function(){
+			$("#firstA").click(function(){
+				if(window.bigPage)bigPage.firstPage();
+			});
+			$("#prevA").click(function(){
+				if(window.bigPage)bigPage.prevPage();
+			});
+			$("#nextA").click(function(){
+				if(window.bigPage)bigPage.nextPage();
+			});
+			$("#lastA").click(function(){
+				if(window.bigPage)bigPage.lastPage();
+			});
+			$("#skipA").click(function(){
+				if(window.bigPage)bigPage.skipPage($("#toPageText").val());
+			});
+		});
+
+})	
+</script>
+
+
+
+		<!-- 首页内容修改 -->
+		<article  style="display:none;"class="module" >
+			
+			<header class="Rheader"><h3>首页版块内容设置</h3></header>
+				<div id="homecontrol">
+				<form class="home" style="margin:30px auto;">
+				  	<fieldset>
+					    <legend>成功案例介绍</legend>
+					    标题：<input type="text"  class="block" id="leftad" / >
+					    内容：<textarea class="block" id="lefttext"></textarea>
+					    <button id="tijiao1">提交内容</button>
+					  </fieldset>
+				</form>
+
+				<form class="home" style="height:280px; margin:30px auto; ">
+				  	<fieldset  style="height:280px; ">
+					    <legend>团队介绍</legend>
+					    标题：<input type="text"  class="block" id="midad" / >
+					    内容：<textarea class="block" id="midtext" style="height: 180px;"></textarea>
+					    <button id="tijiao2" style="margin-right: 12px;">提交内容</button>
+					  <!--  <br> 
+					  <input type="file" value="小图1上传" class="block"></input> <button class="submit-img">提交小图1</button>
+					  <input type="file" value="小图2上传" class="block"></input><button class="submit-img">提交小图2</button> -->
+					</fieldset>
+				</form>
+
+				<form class="home" style="margin:30px auto;">
+				  	<fieldset>
+					    <legend>妇科知识</legend>
+					    标题：<input type="text"  class="block" id="rightad" / >
+					    内容：<textarea class="block" id="righttext"></textarea>
+					    <button id="tijiao3">提交内容</button>
+					  </fieldset>
+				</form>
+
+				</div>
+
+				   				
+					 
+		</article>
 		<div class="clear"></div>
 
-		
-		<!-- 第三个tab  轮播图 -->
-		<article  class="module ">
+
+
+<!--   tab发布新内容  文本编辑器容器-->
+				
+	<article  class="module " id="editnew" style="display:none;">
+			<header class="Rheader"><h3>发布新内容</h3></header>
 			
-			<header class="Rheader"><h3>轮播图设置</h3></header>
-				    <div id="wrapper">
-	        <div id="container">
-	           
+		<!-- 文本编辑器部分 -->
+			<div id="text-edit">
+			  
+				<form id="form" style="width:100%" method="post" target="_blank">
+				<input type = "text" value="请在这里输入标题" id = "title" />
+				 <script type="text/plain" id="myEditor" name="myEditor">
+				          <p>请在这里输入正文内容</p>
+				 </script>
+				</form>
+				<from style="margin-left:30px; ">
+				<label style="margin-top:10px; "><input name="where" type="radio" value="1"  checked="checked"/>发布至成功案例页面</label> 
+				<label><input style="margin-top:10px; " name="where" type="radio" value="2"/>发布至妇科知识页面</label>
+				<button id="push" onclick="test() ">提交</button>
+				</from>
 
-	            <!--图片上传工具 上传进度，缩略图预览-->
+			</div>
 
-	            <div id="uploader">
-	                <div class="queueList">
-	                    <div id="dndArea" class="placeholder">
-	                        <div id="filePicker"></div>
-	                        <p>或将照片拖到这里</p>
-	                    </div>
-	                </div>
-	                <div class="statusBar" style="display:none;">
-	                    <div class="progress">
-	                        <span class="text">0%</span>
-	                        <span class="percentage"></span>
-	                    </div><div class="info"></div>
-	                    <div class="btns">
-	                        <div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-							
-					 
-	</article>
-			<div class="clear"></div>
 
-	
-	</section>
+<!-- 提交内容和标题 -->
+	<script type="text/javascript">
+		var $form=document.getElementById('form')
+		
 
+		function test(){
+			
+
+			if ($("#title").val().length == 0)
+			{
+				alert("请输入标题!");
+				return;
+			}
+			editor_a = UE.getEditor('myEditor',{ serverUrl: 'http://123.57.223.98/Public/Ueditor/php/controller.php'});
+			var where= $("input[name='where']:checked").val();
+			 if($("<div>"+editor_a.getContent()+"</div>").find("img")[0] == null){
+			 	alert("请至少上传一张图片");
+			 }
+			var $img = $("<div>"+editor_a.getContent()+"</div>").find("img")[0].src
+			$.ajax({
+				dataType:'json',
+				type:'POST',
+				data:{title:$("#title").val(), text: editor_a.getContent(),kind:where,thumb:$img, id:global_id},
+				url:'http://123.57.223.98/Article/publishArticle',
+				success:function(data) {
+					//alert(JSON.stringify(data));
+					if (data.errCode == 0)
+					{
+						alert("发布成功!");
+
+						window.location.reload();
+						/*window.location.href = "article";*/
+					}
+					else
+					{	
+						if (data.errMsg)
+						{	alert(data.errMsg);
+						}
+						else
+						{
+							alert("发布失败!");
+						}
+						
+					}
+				}
+			});
+		}
+
+	</script>
+
+
+	</article><!-- end of post new article -->
+		
+		<!-- 第2个tab结束 -->
+		
+		<!-- 第三个tab  轮播图设置 -->
+	<article  class="module" id="lunbo">
+	<header class="Rheader"><h3>轮播图设置</h3></header>
+ 
+<div id="uploader-demo">
+    <!--用来存放item-->
+    <div id="fileList" class="uploader-list"></div>
+    <div id="filePicker" >选择图片</div>
+    <span style="font-size:15px;">轮播图效果最佳图片尺寸宽度826px，高度256px。</span>
 </div>
-</body>
+<style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .progress {
+            position: absolute;
+            top: 0px;
+            left: 0;
+            width: 206px;
+            height: 15px;
+            font-size: 12px;
+            color: #fff;
+            text-align: center;
+            line-height: 15px;
+        }
+        .uploader-list .file-item {
+            position: relative;
 
+        }
+        .progress span {
+            display: inline-block;
+            height: 100%;
+            background: #1C9F09;
+        }
+
+
+    </style>
+
+
+
+
+<div id="flexslider-img">
+		<table class="tablesorter" cellspacing="0"> 
+			<thead id="useimg-list"> 
+				<tr> 
+				<th>文件名</th>				
+    				<th>优先级</th>     				
+    				<th>操作</th> 
+    				</tr> 
+			</thead>
+			</table>
+</div>
+<script>
+
+    // 图片上传demo
+    jQuery(function() {
+        var $ = jQuery,
+        $list = $('#fileList'),
+        // 优化retina, 在retina下这个值是2
+        ratio = window.devicePixelRatio || 1,
+
+        // 缩略图大小
+        thumbnailWidth = 206 * ratio,
+        thumbnailHeight = 62 * ratio,
+
+        // Web Uploader实例
+        uploader;
+
+        // 初始化Web Uploader
+        uploader = WebUploader.create({
+
+            // 自动上传。
+            auto: true,
+
+            // swf文件路径
+            swf: '__PUBLIC__/webuploader/Uploader.swf',
+
+            // 文件接收服务端。
+            server:  'http://123.57.223.98/Upload/webuploader',
+
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#filePicker',
+
+            // 只允许选择文件，可选。
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
+
+        // 当有文件添加进来的时候
+        uploader.on( 'fileQueued', function( file ) {
+            var $li = $(
+                            '<div id="' + file.id + '" class="file-item thumbnail upbutton">' +
+                            '<img>' +
+                            '<div class="info">' + file.name + '</div>' +
+                            '</div>'
+                    ),
+                    $img = $li.find('img');
+
+            $list.append( $li );
+
+            // 创建缩略图
+            uploader.makeThumb( file, function( error, src ) {
+                if ( error ) {
+                    $img.replaceWith('<span>不能预览</span>');
+                    return;
+                }
+
+                $img.attr( 'src', src );
+            }, thumbnailWidth, thumbnailHeight );
+        });
+
+        // 文件上传过程中创建进度条实时显示。
+        uploader.on( 'uploadProgress', function( file, percentage ) {
+            var $li = $( '#'+file.id ),
+                $percent = $li.find('.progress span');
+
+            // 避免重复创建
+            if ( !$percent.length ) {
+                $percent = $('<p class="progress"><span></span></p>')
+                        .appendTo( $li )
+                        .find('span');
+            }
+
+            $percent.css( 'width', percentage * 100 + '%').text(percentage * 100+'%');
+        });
+
+        // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+        uploader.on( 'uploadSuccess', function( file ) {
+			
+            console.log(file);
+            $( '#'+file.id ).addClass('upload-state-done');//给item添加成功class, 用样式标记上传成功。
+
+	$("#useimg-list").empty();       //上传成功后刷新轮播图列表
+	$.ajax({
+		dataType:'json',
+		type:'GET',
+		data:{},
+		async:false,
+		url:'http://123.57.223.98/scrollPicture/getImgList',
+		success:function(data) {
+				
+		for (var i = 0;i<data.data.length; i++) {
+
+			var $tr = '<tr id="'+data.data[i].imgurl+'"><td>'+data.data[i].imgurl+'</td>'
+			var $td = '<td>'+data.data[i].index+'</td>'
+			var $use ='<td id ="delimg" onclick="delfleximg(' + data.data[i].id+');">删除</td></tr>'								
+			var imgform = $tr+$td+$use				
+    			
+			$("#useimg-list").append(imgform);
+		}
+		}
+		});
+ });
+
+
+
+
+        // 文件上传失败，显示上传出错。
+        uploader.on( 'uploadError', function( file ) {
+            var $li = $( '#'+file.id ),
+                    $error = $li.find('div.error');
+
+            // 避免重复创建
+            if ( !$error.length ) {
+                $error = $('<div class="error"></div>').appendTo( $li );
+            }
+
+            $error.text('上传失败');
+        });
+
+        // 完成上传完了，成功或者失败，先删除进度条。
+        uploader.on( 'uploadComplete', function( file ) {
+/*           $( '#'+file.id ).find('.progress').remove();*/
+			
+        });
+
+    });
+
+
+</script>
+
+
+</article>		
+
+<!-- 管理员设置 -->
+<article  class="module" id="admin">
+			
+	<header class="Rheader"><h3>管理员设置</h3></header>
+		 <div id="adminpassword" style="font-size: 15px">
+		  <span>后台管理员密码设置</span>
+ 
+		  <p>当前密码:<input type="text" id="passwordset"></p> 
+		 
+		  <p>设新密码:<input type="text" id="newpassword"></p>
+		  <button id="setNewpassword" >提交</button>
+		  </div>
+				   
+</article>
+</section>
+</body>
 </html>
